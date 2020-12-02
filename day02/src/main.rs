@@ -1011,12 +1011,10 @@ fn main() {
 fn part1(input: &[&str; 1000]) -> i32 {
     let mut count: i32 = 0;
     for item in input.iter() {
-        let mut v = item.rsplit(':').collect::<Vec<&str>>();
-        v.reverse();
+        let v = item.split(':').collect::<Vec<&str>>();
         let policy = v[0 as usize];
         let password = v[1 as usize];
-        let mut v2 = policy.rsplit(' ').collect::<Vec<&str>>();
-        v2.reverse();
+        let v2 = policy.split(' ').collect::<Vec<&str>>();
         let min_max = v2[0];
         let v3 = min_max.split('-').collect::<Vec<&str>>();
         let letter = v2[1 as usize];
