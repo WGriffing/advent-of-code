@@ -65,3 +65,26 @@ fn part2(hill: &Hill) -> u32 {
 
     trees1 * trees2 * trees3 * trees4 * trees5
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn tests() {
+        let input: &str = "..##.......
+#...#...#..
+.#....#..#.
+..#.#...#.#
+.#...##..#.
+..#.##.....
+.#.#.#....#
+.#........#
+#.##...#...
+#...##....#
+.#..#...#.#";
+        let hill = input_generator(&input).unwrap();
+        assert_eq!(part1(&hill), 7);
+        assert_eq!(part2(&hill), 336);
+    }
+}
