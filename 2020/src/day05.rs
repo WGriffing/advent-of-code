@@ -31,7 +31,7 @@ fn part2(input: &str) -> i32 {
     }
     seat_ids.sort();
 
-    for (i, id) in seat_ids.iter().enumerate() {
+    for (i, _id) in seat_ids.iter().enumerate() {
         if i > 0 {
             if seat_ids[i - 1] + 1 != seat_ids[i] {
                 return seat_ids[i - 1] + 1;

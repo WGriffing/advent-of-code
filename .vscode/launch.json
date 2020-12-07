@@ -9,19 +9,23 @@
             "request": "launch",
             "name": "Debug unit tests in library 'aoc2020'",
             "cargo": {
+                "cwd": "${workspaceFolder}/2020",
                 "args": [
                     "test",
                     "--no-run",
                     "--lib",
-                    "--package=aoc2020"
+                    "--package=aoc2020",
+                    "--manifest-path",
+                    "./2020/Cargo.toml"
                 ],
                 "filter": {
                     "name": "aoc2020",
                     "kind": "lib"
                 }
             },
+            "cwd": "${workspaceFolder}",
             "args": [],
-            "cwd": "${workspaceFolder}"
+            
         },
         {
             "type": "lldb",
@@ -31,7 +35,9 @@
                 "args": [
                     "build",
                     "--bin=aoc2020",
-                    "--package=aoc2020"
+                    "--package=aoc2020",
+                    "--manifest-path",
+                    "./2020/Cargo.toml"
                 ],
                 "filter": {
                     "name": "aoc2020",
@@ -50,7 +56,9 @@
                     "test",
                     "--no-run",
                     "--bin=aoc2020",
-                    "--package=aoc2020"
+                    "--package=aoc2020",
+                    "--manifest-path",
+                    "./2020/Cargo.toml"
                 ],
                 "filter": {
                     "name": "aoc2020",
