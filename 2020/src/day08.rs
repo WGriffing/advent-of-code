@@ -8,7 +8,7 @@ struct Instruction {
     exec: bool,
 }
 
-struct Result {
+struct Results {
     acc: i32,
     line: i32,
     exec: bool,
@@ -63,8 +63,8 @@ fn day8_part2(data: &[Instruction]) -> i32 {
     0
 }*/
 
-fn process_inst(instruction: &Instruction, acc: i32, line: i32) -> Result {
-    let mut result = Result {
+fn process_inst(instruction: &Instruction, acc: i32, line: i32) -> Results {
+    let mut result = Results {
         acc: acc,
         line: line,
         exec: true,
