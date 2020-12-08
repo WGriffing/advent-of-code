@@ -39,14 +39,12 @@ fn day8_part1(data: &[Instruction]) -> i32 {
 
     let mut copied_data = data.to_vec();
 
-    let mut i: usize = 0;
     loop {
         let instruction = copied_data.get(line as usize).unwrap();
         if instruction.exec {
             return acc;
         } else {
             let result = process_inst(&instruction, acc, line);
-            acc = result.acc;
 
             let new_instruction = Instruction {
                 cmd: instruction.cmd.clone(),
@@ -55,13 +53,13 @@ fn day8_part1(data: &[Instruction]) -> i32 {
             };
             let _ = mem::replace(&mut copied_data[line as usize], new_instruction);
             line = result.line;
+            acc = result.acc;
         }
-        i += 1;
     }
 }
 
 /*#[aoc(day8, part2)]
-fn solve_part2(data: &[Instruction]) -> i32 {
+fn day8_part2(data: &[Instruction]) -> i32 {
     0
 }*/
 
