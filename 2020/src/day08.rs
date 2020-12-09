@@ -104,20 +104,18 @@ fn day8_part2(data: &Vec<Instruction>) -> i32 {
     let mut tried: Vec<usize> = Vec::new();
 
     loop {
-        let (finite, _acc, stack) = infinite_loop(&mut program);
-        let mut s_copy = stack.clone();
-        let mut idx: i32 = s_copy.len() as i32 - 1;
+        let (finite, _acc, mut stack) = infinite_loop(&mut program);
+        let mut idx: i32 = stack.len() as i32 - 1;
 
         if finite {
             return _acc;
         } else {
             let mut found: bool = false;
             while idx >= 0 && !found {
-                let el = s_copy.pop().unwrap();
+                let el = stack.pop().unwrap();
                 let line = el.r.line.clone() as usize;
-                if (el.i.cmd == String::from("nop") || el.i.cmd == String::from("jmp"))
-                    && !tried.contains(&line)
-                {
+                if cmd_can_swap(el.i.cmd) && !tried.contains(&line) {
+                    println!("Checking swap idx={} // program line={}", idx, line);
                     tried.push(el.r.line as usize);
                     found = true;
                     invert_command(&mut program[line]);
@@ -128,6 +126,10 @@ fn day8_part2(data: &Vec<Instruction>) -> i32 {
             }
         }
     }
+}
+
+fn cmd_can_swap(cmd: String) -> bool {
+    cmd == String::from("nop") || cmd == String::from("jmp")
 }
 
 fn invert_command(inst: &mut Instruction) -> () {
@@ -141,12 +143,12 @@ fn invert_command(inst: &mut Instruction) -> () {
 fn reset_program(
     program: &mut Vec<Instruction>,
     original: &mut Vec<Instruction>,
-    line: &usize,
+    keep_line: &usize,
 ) -> () {
     for i in 0..program.len() {
         program[i].exec = false;
 
-        if &i != line {
+        if &i != keep_line {
             program[i] = original[i].clone();
         }
     }
