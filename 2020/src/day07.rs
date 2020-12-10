@@ -6,7 +6,7 @@ pub struct Bag {
     pub shiny: bool,
 
     // a hash of the sub bags and quantity
-    pub sub_bags: HashMap<String, i32>,
+    pub sub_bags: HashMap<String, i64>,
 }
 
 #[aoc_generator(day7)]
@@ -33,7 +33,7 @@ pub fn input_generator(input: &str) -> HashMap<String, Bag> {
                 continue;
             }
             let partition = sub_bag.find(" ").unwrap();
-            let number = sub_bag[..partition].parse::<i32>().unwrap();
+            let number = sub_bag[..partition].parse::<i64>().unwrap();
             let sub_bag_name = &sub_bag[(partition + 1)..];
 
             if sub_bag_name == "shiny gold" {
@@ -55,7 +55,7 @@ pub fn input_generator(input: &str) -> HashMap<String, Bag> {
 }
 
 #[aoc(day7, part1)]
-fn part1(input: &HashMap<String, Bag>) -> i32 {
+fn part1(input: &HashMap<String, Bag>) -> i64 {
     let mut result = HashMap::new();
 
     for (name, details) in input.iter() {
@@ -80,10 +80,10 @@ fn part1(input: &HashMap<String, Bag>) -> i32 {
         }
     }
 
-    result.len() as i32
+    result.len() as i64
 }
 
-fn traverse_tree(name: &String, input: &HashMap<String, Bag>) -> (bool, i32) {
+fn traverse_tree(name: &String, input: &HashMap<String, Bag>) -> (bool, i64) {
     let mut contains_shiny = false;
     let mut bags = 0;
 
@@ -107,8 +107,8 @@ fn traverse_tree(name: &String, input: &HashMap<String, Bag>) -> (bool, i32) {
 }
 
 #[aoc(day7, part2)]
-fn part2(input: &HashMap<String, Bag>) -> i32 {
-    let output: i32 = traverse_tree(&"shiny gold".to_string(), &input).1;
+fn part2(input: &HashMap<String, Bag>) -> i64 {
+    let output: i64 = traverse_tree(&"shiny gold".to_string(), &input).1;
 
     output
 }
