@@ -14,19 +14,27 @@ fn generator(input: &str) -> Vec<i64> {
 
 #[aoc(day9, part1)]
 fn part1(numbers: &Vec<i64>) -> i64 {
-    process_numbers(&numbers, 25)
+    let (_, weakness) = process_numbers(&numbers, 25);
+    weakness
 }
 
-fn process_numbers(numbers: &Vec<i64>, preamble: usize) -> i64 {
+#[aoc(day9, part2)]
+fn part2(numbers: &Vec<i64>) -> i64 {
+    let (idx, weakness) = process_numbers(&numbers, 25);
+    let sub_numbers = numbers[0..idx].iter().cloned().collect();
+    check_for_sum_of_two_or_more(&sub_numbers, &weakness)
+}
+
+fn process_numbers(numbers: &Vec<i64>, preamble: usize) -> (usize, i64) {
     let mut queue: VecDeque<i64> = VecDeque::with_capacity(preamble);
 
     for i in 0..numbers.len() {
         if i < preamble {
             queue.push_back(numbers[i]);
         } else {
-            let is_valid = check_for_sum(&queue, &numbers[i]);
+            let is_valid = check_for_sum_of_two_numbers(&queue, &numbers[i]);
             if !is_valid {
-                return numbers[i];
+                return (i, numbers[i]);
             } else {
                 queue.pop_front();
                 queue.push_back(numbers[i]);
@@ -34,10 +42,28 @@ fn process_numbers(numbers: &Vec<i64>, preamble: usize) -> i64 {
         }
     }
 
+    (0, 0)
+}
+
+fn check_for_sum_of_two_or_more(numbers: &Vec<i64>, desired: &i64) -> i64 {
+    let nums = &mut numbers.clone();
+
+    for i in 0..(nums.len() - 1) {
+        for j in (i + 1)..nums.len() {
+            let slice = &nums[i..j];
+            let sum: i64 = slice.iter().cloned().sum();
+            if &sum == desired {
+                let mut sorted = slice.iter().cloned().collect::<Vec<i64>>();
+                sorted.sort();
+                return sorted.first().unwrap() + sorted.last().unwrap();
+            }
+        }
+    }
+
     0
 }
 
-fn check_for_sum(q: &VecDeque<i64>, desired: &i64) -> bool {
+fn check_for_sum_of_two_numbers(q: &VecDeque<i64>, desired: &i64) -> bool {
     let mut l: usize = 0;
     let mut r: usize = q.len() - 1;
     let qq = &mut q.clone();
@@ -46,16 +72,15 @@ fn check_for_sum(q: &VecDeque<i64>, desired: &i64) -> bool {
 
     /* Now look for the two candidates in
     the sorted array*/
-    println!("q = {:?}", qq);
-    println!("desired = {:?}", desired);
 
     while l < r {
         if qq[l] + qq[r] == desired.clone() {
             return true;
         } else if qq[l] + qq[r] < desired.clone() {
             l += 1;
-        } else {
-            // A[i] + A[j] > sum
+        } else
+        /* qq[l] + qq[r] > sum */
+        {
             r -= 1;
         }
     }
@@ -89,6 +114,11 @@ mod tests {
 309
 576";
         let numbers = generator(&input);
-        assert_eq!(process_numbers(&numbers, 5), 127);
+        let (_, weakness) = process_numbers(&numbers, 5);
+        assert_eq!(weakness, 127);
+
+        let (idx, weakness) = process_numbers(&numbers, 5);
+        let sub_numbers = &numbers[0..idx].iter().cloned().collect();
+        assert_eq!(check_for_sum_of_two_or_more(&sub_numbers, &weakness), 62);
     }
 }
